@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doideiragg — Roupas FiveM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: #0a0a0a;
+    color: #f0f0f0;
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    border-bottom: 1px solid #222;
+    background: #0a0a0a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: #e8ff00;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: #e8ff00; }
+
+  .cart-btn {
+    background: #e8ff00;
+    color: #000;
+    border: none;
+    padding: 8px 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .hero {
+    position: relative;
+    padding: 80px 40px 60px;
+    background: linear-gradient(135deg, #0a0a0a 60%, #111 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'FIVEM';
+    position: absolute;
+    right: -20px;
+    top: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: #e8ff00;
+    opacity: 0.04;
+    letter-spacing: 10px;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: #e8ff00;
+    color: #000;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 6px;
+    color: #f0f0f0;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: #e8ff00; }
+
+  .hero p {
+    font-size: 15px;
+    color: #777;
+    letter-spacing: 1px;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .hero-btns { display: flex; gap: 12px; }
+
+  .btn-primary {
+    background: #e8ff00;
+    color: #000;
+    border: none;
+    padding: 14px 32px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: #d4eb00; }
+
+  .btn-outline {
+    background: transparent;
+    color: #f0f0f0;
+    border: 1px solid #333;
+    padding: 14px 32px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: #e8ff00; color: #e8ff00; }
+
+  .section-header {
+    padding: 48px 40px 24px;
+  }
+
+  .section-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 5px;
+    color: #f0f0f0;
+  }
+
+  .section-header h2 span { color: #e8ff00; }
+
+  .section-header p {
+    font-size: 13px;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 0 40px 28px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #777;
+    padding: 6px 18px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: #e8ff00;
+    color: #e8ff00;
+  }
+
+  .catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2px;
+    padding: 0 40px 60px;
+  }
+
+  .product-card {
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .product-card:hover { transform: translateY(-2px); }
+  .product-card:hover .card-overlay { opacity: 1; }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 4px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(232,255,0,0.08);
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .overlay-btn {
+    width: 100%;
+    background: #e8ff00;
+    color: #000;
+    border: none;
+    padding: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #e8ff00;
+    color: #000;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+  }
+
+  .badge.sold { background: #333; color: #777; }
+
+  .card-info {
+    padding: 16px;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  .card-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f0f0f0;
+    margin-bottom: 4px;
+  }
+
+  .card-info .cat {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card-info .price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #e8ff00;
+  }
+
+  .card-info .price .currency {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+  }
+
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 14px 0;
+    background: #e8ff00;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    animation: marquee 18s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-track span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 2px 40px 48px;
+  }
+
+  .stat-box {
+    background: #111;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .stat-box .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 3px;
+    color: #e8ff00;
+    line-height: 1;
+  }
+
+  .stat-box .label {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .custom-section {
+    margin: 0 40px 60px;
+    border: 1px solid #1a1a1a;
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .custom-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .custom-section h2 span { color: #e8ff00; }
+
+  .custom-section p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 380px;
+    margin-top: 10px;
+  }
+
+  footer {
+    border-top: 1px solid #1a1a1a;
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .logo { font-size: 20px; }
+  footer p { font-size: 12px; color: #444; letter-spacing: 1px; }
+  footer a { color: #555; text-decoration: none; font-size: 12px; letter-spacing: 1px; }
+  footer a:hover { color: #e8ff00; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Doideiragg</div>
+  <ul class="nav-links">
+    <li><a href="#">Catálogo</a></li>
+    <li><a href="#">Coleções</a></li>
+    <li><a href="#">Customizar</a></li>
+    <li><a href="#">Sobre</a></li>
+  </ul>
+  <button class="cart-btn">Carrinho (0)</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Roupas Exclusivas para FiveM</div>
+  <h1>VESTE COM<br><span>IDENTIDADE</span></h1>
+  <p>Personalizações únicas para o seu personagem no FiveM. Designs exclusivos criados para quem leva o roleplay a sério.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Ver Catálogo</button>
+    <button class="btn-outline">Customizar Agora</button>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>DOIDEIRAGG</span>
+    <span>•</span>
+    <span>FIVEM CUSTOM</span>
+    <span>•</span>
+    <span>ROUPAS EXCLUSIVAS</span>
+    <span>•</span>
+    <span>ROLEPLAY FASHION</span>
+    <span>•</span>
+    <span>DRIP NO SERVER</span>
+    <span>•</span>
+    <span>DOIDEIRAGG</span>
+    <span>•</span>
+    <span>FIVEM CUSTOM</span>
+    <span>•</span>
+    <span>ROUPAS EXCLUSIVAS</span>
+    <span>•</span>
+    <span>ROLEPLAY FASHION</span>
+    <span>•</span>
+    <span>DRIP NO SERVER</span>
+    <span>•</span>
+  </div>
+</div>
+
+<div class="section-header">
+  <p>Catálogo completo</p>
+  <h2>NOSSOS <span>DROPS</span></h2>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active">Todos</button>
+  <button class="filter-btn">Camisetas</button>
+  <button class="filter-btn">Jaquetas</button>
+  <button class="filter-btn">Calças</button>
+  <button class="filter-btn">Conjuntos</button>
+  <button class="filter-btn">Uniformes</button>
+</div>
+
+<div class="catalog">
+
+  <div class="product-card">
+    <div class="card-img" style="background:#161616; color:#e8ff00;">
+      SHIRT<br>01
+      <span class="badge">Novo</span>
+      <div class="card-overlay"><button class="overlay-btn">Adicionar ao Carrinho</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Camiseta</div>
+      <h3>Street Tee — Dark</h3>
+      <div class="price">R$ 25 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="card-img" style="background:#1a1208; color:#e8a000;">
+      JACK<br>02
+      <span class="badge">Top</span>
+      <div class="card-overlay"><button class="overlay-btn">Adicionar ao Carrinho</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Jaqueta</div>
+      <h3>Bomber Laranja</h3>
+      <div class="price">R$ 45 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="card-img" style="background:#0d1219; color:#4a9eff;">
+      SUIT<br>03
+      <span class="badge">Exclusivo</span>
+      <div class="card-overlay"><button class="overlay-btn">Adicionar ao Carrinho</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Conjunto</div>
+      <h3>Full Gang Blue</h3>
+      <div class="price">R$ 80 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="card-img" style="background:#120d19; color:#c084fc;">
+      UNI<br>04
+      <div class="card-overlay"><button class="overlay-btn">Adicionar ao Carrinho</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Uniforme</div>
+      <h3>Mechanic Purple</h3>
+      <div class="price">R$ 60 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="card-img" style="background:#191212; color:#ff5555;">
+      DROP<br>05
+      <span class="badge sold">Esgotado</span>
+      <div class="card-overlay"><button class="overlay-btn" style="background:#333;color:#777;cursor:default;">Indisponível</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Camiseta</div>
+      <h3>Blood Red Edition</h3>
+      <div class="price" style="color:#555;">R$ 30 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <div class="card-img" style="background:#141414; color:#aaa;">
+      PANT<br>06
+      <span class="badge">Popular</span>
+      <div class="card-overlay"><button class="overlay-btn">Adicionar ao Carrinho</button></div>
+    </div>
+    <div class="card-info">
+      <div class="cat">Calça</div>
+      <h3>Cargo Tactical</h3>
+      <div class="price">R$ 35 <span class="currency">in-game</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="stats">
+  <div class="stat-box">
+    <div class="num">200+</div>
+    <div class="label">Clientes Ativos</div>
+  </div>
+  <div class="stat-box">
+    <div class="num">50+</div>
+    <div class="label">Designs Únicos</div>
+  </div>
+  <div class="stat-box">
+    <div class="num">100%</div>
+    <div class="label">Personalizado</div>
+  </div>
+</div>
+
+<div class="custom-section">
+  <div>
+    <h2>QUER UM LOOK<br><span>EXCLUSIVO?</span></h2>
+    <p>Criamos designs personalizados para o seu personagem, facção ou servidor. Entre em contato e receba um orçamento.</p>
+  </div>
+  <button class="btn-primary" style="white-space:nowrap; padding: 16px 40px; font-size: 15px;">Solicitar Custom</button>
+</div>
+
+<footer>
+  <div class="logo">Doideiragg</div>
+  <p>© 2025 Doideiragg — Todos os direitos reservados</p>
+  <div style="display:flex; gap:24px;">
+    <a href="#">Discord</a>
+    <a href="#">Instagram</a>
+    <a href="#">Contato</a>
+  </div>
+</footer>
+
+<script>
+  const filters = document.querySelectorAll('.filter-btn');
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
